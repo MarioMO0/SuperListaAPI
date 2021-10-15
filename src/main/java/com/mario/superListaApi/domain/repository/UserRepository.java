@@ -1,11 +1,11 @@
 package com.mario.superListaApi.domain.repository;
-import com.mario.superListaApi.domain.User;
+import com.mario.superListaApi.domain.UserE;
 
 import java.util.List;
 import java.util.Optional;
 public interface UserRepository {
-    Optional<User> getUserByName(String userName);
-    Optional<User> getUser(int userId);
-    User save(User user);
+    UserE findByUserName(String userName);
+    Optional<UserE> getUser(int userId);
+    UserE save(UserE user);
     void delete(int userId);
 }

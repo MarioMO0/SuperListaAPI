@@ -1,5 +1,5 @@
 package com.mario.superListaApi.persistence.mapper;
-import com.mario.superListaApi.domain.User;
+import com.mario.superListaApi.domain.UserE;
 import com.mario.superListaApi.persistence.entity.Usuario;
 import org.mapstruct.InheritInverseConfiguration;
 import org.mapstruct.Mapper;
@@ -14,9 +14,9 @@ public interface UserMapper {
             @Mapping(source = "rol", target = "rol"),
 
     })
-    User toUser(Usuario usuario);
+    UserE toUser(Usuario usuario);
 
     @InheritInverseConfiguration
     @Mapping(target = "listaArticulos", ignore = true)
-    Usuario toUsuario(User user);
+    Usuario toUsuario(UserE user);
 }

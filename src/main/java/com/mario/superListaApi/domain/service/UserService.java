@@ -1,6 +1,6 @@
 package com.mario.superListaApi.domain.service;
 
-import com.mario.superListaApi.domain.User;
+import com.mario.superListaApi.domain.UserE;
 import com.mario.superListaApi.domain.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,15 +13,15 @@ public class UserService {
     @Autowired
     private UserRepository userRepository;
 
-    public Optional<User> getUserByName(String userName){
-        return userRepository.getUserByName(userName);
+    public UserE getUserByName(String userName){
+        return userRepository.findByUserName(userName);
     }
 
-    public Optional<User> getUser(int userId){
+    public Optional<UserE> getUser(int userId){
         return userRepository.getUser(userId);
     }
 
-    public User save(User user){
+    public UserE save(UserE user){
         return userRepository.save(user);
     }
 

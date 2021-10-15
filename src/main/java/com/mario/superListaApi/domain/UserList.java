@@ -4,7 +4,7 @@ public class UserList {
     private int listId;
     private String listName;
     private int userId;
-    private User user;
+    private UserE user;
 
 
     public int getListId() {
@@ -28,11 +28,11 @@ public class UserList {
         this.userId = userId;
     }
 
-    public User getUser() {
+    public UserE getUser() {
         return user;
     }
 
-    public void setUser(User user) {
+    public void setUser(UserE user) {
         this.user = user;
     }
 }

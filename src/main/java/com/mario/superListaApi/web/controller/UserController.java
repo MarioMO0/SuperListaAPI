@@ -1,6 +1,6 @@
 package com.mario.superListaApi.web.controller;
 
-import com.mario.superListaApi.domain.User;
+import com.mario.superListaApi.domain.UserE;
 import com.mario.superListaApi.domain.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -15,19 +15,24 @@ public class UserController {
     private UserService userService;
 
     @GetMapping("/{userName}")
-    public ResponseEntity<User>getUserByName(@PathVariable("userName") String userName){
-        return userService.getUserByName(userName)
+    public ResponseEntity<UserE>getUserByName(@PathVariable("userName") String userName){
+        if(userService.getUserByName(userName) !=  null){
+            return  new ResponseEntity<UserE>(HttpStatus.OK);
+        }else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+                /*userService.getUserByName(userName)
                 .map(user -> new ResponseEntity<>(user, HttpStatus.OK))
-                .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
+                .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));*/
     }
     @GetMapping("/{id}")
-    public ResponseEntity<User>getUser(@PathVariable("id") int userId){
+    public ResponseEntity<UserE>getUser(@PathVariable("id") int userId){
         return userService.getUser(userId)
                 .map(user -> new ResponseEntity<>(user, HttpStatus.OK))
                 .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
     @PostMapping
-    public ResponseEntity<User> save(@RequestBody User user){
+    public ResponseEntity<UserE> save(@RequestBody UserE user){
         return new ResponseEntity<>(userService.save(user), HttpStatus.CREATED);
     }
 

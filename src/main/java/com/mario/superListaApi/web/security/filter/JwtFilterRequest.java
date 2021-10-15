@@ -1,13 +1,12 @@
 package com.mario.superListaApi.web.security.filter;
 
-import com.mario.superListaApi.domain.service.SuperListaUserDetailService;
-import com.mario.superListaApi.web.security.JWTUtil;
+import com.mario.superListaApi.domain.service.SuperListaUserDetailsService;
+import com.mario.superListaApi.web.security.JWTutil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.security.web.authentication.WebAuthenticationDetails;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -17,36 +16,33 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-
 @Component
 public class JwtFilterRequest extends OncePerRequestFilter {
 
     @Autowired
-    private JWTUtil jwtUtil;
+    private JWTutil jwtUtil;
 
     @Autowired
-    private SuperListaUserDetailService superListaUserDetailService;
+    private SuperListaUserDetailsService superListaUserDetailsService;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        String authorizationHeader= request.getHeader("Authorization");
+        String authorizationHeader = request.getHeader("Authorization");
+        if(authorizationHeader != null && authorizationHeader.startsWith("Bearer")){
+            String jwt= authorizationHeader.substring(7);
+            String username = jwtUtil.extractUsername(jwt);
 
-        if (authorizationHeader != null && authorizationHeader.startsWith("Bearer")){
-            String jwt=authorizationHeader.substring(7);
-
-            String  username= jwtUtil.extractUsername(jwt);
-
-            if( username != null && SecurityContextHolder.getContext().getAuthentication() == null){
-                UserDetails userDetails = superListaUserDetailService.loadUserByUsername(username);
+            if(username != null && SecurityContextHolder.getContext().getAuthentication() == null){
+                UserDetails userDetails= superListaUserDetailsService.loadUserByUsername(username);
 
                 if(jwtUtil.validateToken(jwt, userDetails)){
-                    UsernamePasswordAuthenticationToken authToken =new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+                    UsernamePasswordAuthenticationToken authToken= new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
                     authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
 
                     SecurityContextHolder.getContext().setAuthentication(authToken);
                 }
             }
         }
-        filterChain.doFilter(request, response);
+        filterChain.doFilter(request,response);
     }
 }

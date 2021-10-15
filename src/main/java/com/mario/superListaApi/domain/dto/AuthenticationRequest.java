@@ -2,7 +2,7 @@ package com.mario.superListaApi.domain.dto;
 
 public class AuthenticationRequest {
     private String username;
-    private String password;
+    private  String password;
 
     public String getUsername() {
         return username;
