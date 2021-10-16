@@ -7,6 +7,7 @@ import com.mario.superListaApi.persistence.crud.UsuarioCrudRepository;
 import com.mario.superListaApi.persistence.entity.Usuario;
 import com.mario.superListaApi.persistence.mapper.UserMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Repository;
 @Repository
 public class UsuarioRepository implements UserRepository {
@@ -31,6 +32,7 @@ public class UsuarioRepository implements UserRepository {
     @Override
     public UserE save(UserE user) {
         Usuario usuario= mapper.toUsuario(user);
+        usuario.setContrasena(encriptarPassword(usuario.getContrasena()));
         return mapper.toUser(usuarioCrudRepository.save(usuario));
     }
 
@@ -39,21 +41,8 @@ public class UsuarioRepository implements UserRepository {
         usuarioCrudRepository.deleteById(userId);
     }
 
-
-    /*public List<Usuario> getAll(){
-        return (List<Usuario>) usuarioCrudRepository.findAll();
+    public static String encriptarPassword(String password){
+        BCryptPasswordEncoder encoder= new BCryptPasswordEncoder();
+        return encoder.encode(password);
     }
-
-
-    public Optional<Usuario> getUsuario(int idUsuario){
-        return usuarioCrudRepository.findById(idUsuario);
-    }
-
-    public Usuario save(Usuario usuario) {
-        return usuarioCrudRepository.save(usuario);
-    }
-
-    public void delete(int idUsuario) {
-        usuarioCrudRepository.deleteById(idUsuario);
-    }*/
 }

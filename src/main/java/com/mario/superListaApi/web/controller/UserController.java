@@ -21,9 +21,7 @@ public class UserController {
         }else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-                /*userService.getUserByName(userName)
-                .map(user -> new ResponseEntity<>(user, HttpStatus.OK))
-                .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));*/
+
     }
     @GetMapping("/{id}")
     public ResponseEntity<UserE>getUser(@PathVariable("id") int userId){
@@ -31,7 +29,7 @@ public class UserController {
                 .map(user -> new ResponseEntity<>(user, HttpStatus.OK))
                 .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
-    @PostMapping
+    @PostMapping("/register")
     public ResponseEntity<UserE> save(@RequestBody UserE user){
         return new ResponseEntity<>(userService.save(user), HttpStatus.CREATED);
     }
